@@ -1,3 +1,7 @@
+'''
+Disclaimer: This code and software are provided for educational purposes only. The author and contributors disclaim any responsibility for misuse, harm, or damage caused by the use of this code. Use at your own risk and responsibility. This code should not be used for any malicious or unauthorized activities.
+'''
+
 from PIL import ImageGrab
 import socket
 import os
