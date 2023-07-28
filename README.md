@@ -1,7 +1,7 @@
 # aRAT - a remote access tool written in python.
 
 Features:
-- [ ] Keylogging
-- [ ] Screenshot
+- [x] Keylogging
+- [x] Screenshot
 - [ ] Microphone
 - [ ] Desktop streaming
