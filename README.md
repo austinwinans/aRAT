@@ -12,3 +12,4 @@ Features:
 - [x] Screenshot
 - [ ] Microphone
 - [ ] Desktop streaming
+- [x] Remote command execution
