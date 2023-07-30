@@ -10,6 +10,8 @@ Tested on Windows locally. You must change the IP address of the C2 server in th
 Features:
 - [x] Keylogging
 - [x] Screenshot
+- [x] Remote command execution
+- [x] Webcam Picture Taking
+- [x] Transfer files to client
 - [ ] Microphone
 - [ ] Desktop streaming
-- [x] Remote command execution
