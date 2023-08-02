@@ -13,5 +13,6 @@ Features:
 - [x] Remote command execution
 - [x] Webcam Picture Taking
 - [x] Transfer files to client
+- [x] Creds - Get wifi names and passwords
 - [ ] Microphone
 - [ ] Desktop streaming
