@@ -14,5 +14,18 @@ Features:
 - [x] Webcam Picture Taking
 - [x] Transfer files to client
 - [x] Creds - Get wifi names and passwords
-- [ ] Microphone
+
+In Development:
+- [x] Microphone listening
+— Currently only saving microphone stream when client is closed. Real-time microphone streaming is producing static  
+- [x] Browser password grabber
+— Currently only working for Chrome 
+ 
+To Do: 
 - [ ] Desktop streaming
+- [ ] Encrypted communications
+- [ ] Port scanner
+- [ ] Network scanner (ARP, ping, etc)
+- [ ] Allow more than just text files to be uploaded to the client
+- [ ] Send messages to client via popup
+- [ ] File transfer from client to server
