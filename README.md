@@ -5,7 +5,7 @@ Please use this code responsibly and ensure you have proper authorization before
 
 # aRAT - a remote access tool written in python.
 
-Tested on Windows locally. You must change the IP address of the C2 server in the client.py file.
+Tested on Windows locally and in a VM with bridged network connection. You must change the IP address of the C2 server in the client.py file.
 
 Features:
 - [x] Keylogging
